@@ -1,9 +1,4 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Parameters:
-  LatestAmiId:
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
-    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64'
-
 Resources:
   WebServerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -17,7 +12,7 @@ Resources:
   WebServerInstance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: !Ref LatestAmiId
+      ImageId: ami-0521cb2d60cfbb1a6
       InstanceType: t2.micro
       SecurityGroupIds:
         - !Ref WebServerSecurityGroup
