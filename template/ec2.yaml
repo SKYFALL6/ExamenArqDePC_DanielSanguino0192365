@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Habilitar acceso HTTP
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+  WebServerInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c02fb55956c7d316 # Amazon Linux 2023 en us-east-1
+      InstanceType: t2.micro
+      SecurityGroupIds:
+        - !Ref WebServerSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y httpd
+          systemctl start httpd
+          systemctl enable httpd
+          cat <<EOF > /var/www/html/index.html
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Examen Final</title>
+              <style>body { font-family: Arial; text-align: center; margin-top: 50px; }</style>
+          </head>
+          <body>
+              <h1>Daniel Alexis Sanguino Rodríguez</h1>
+              <h2>Código: [REEMPLAZA_CON_TU_CÓDIGO]</h2>
+              <p>Examen Final Arquitectura de Computadores</p>
+          </body>
+          </html>
+          EOF
